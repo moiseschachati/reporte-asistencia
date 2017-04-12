@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>Reporte de Asistencias</display-name>
+  <filter>
+    <filter-name>AuthenFilter</filter-name>
+    <filter-class>com.chachati.asistencia.AuthenFilter</filter-class>
+    <init-param>
+      <param-name>test-param</param-name>
+      <param-value>C:\Users\Moises\Desktop</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthenFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <servlet id="jsp">
+     <servlet-name>jsp</servlet-name>
+     <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+     <init-param>
+         <param-name>logVerbosityLevel</param-name>
+         <param-value>DEBUG</param-value>
+     </init-param>
+     <init-param>
+         <param-name>fork</param-name>
+         <param-value>>false</param-value>
+     </init-param>
+     <init-param>
+         <param-name>keepgenerated</param-name>
+         <param-value>>true</param-value>
+     </init-param>
+
+     <load-on-startup>0</load-on-startup>
+   </servlet>
+
+   <servlet-mapping>
+     <servlet-name>jsp</servlet-name>
+     <url-pattern>*.jsp</url-pattern>
+     <url-pattern>*.jspf</url-pattern>
+     <url-pattern>*.jspx</url-pattern>
+     <url-pattern>*.xsp</url-pattern>
+     <url-pattern>*.JSP</url-pattern>
+     <url-pattern>*.JSPF</url-pattern>
+     <url-pattern>*.JSPX</url-pattern>
+     <url-pattern>*.XSP</url-pattern>
+   </servlet-mapping>
+   
+  <servlet id="TestServlet">
+    <servlet-name>CheckAuth</servlet-name>
+    <servlet-class>com.chachati.asistencia.CheckCredentials</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckAuth</servlet-name>
+    <url-pattern>/checkauth</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>UserInfo</servlet-name>
+    <servlet-class>com.chachati.asistencia.UserInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserInfo</servlet-name>
+    <url-pattern>/userinfo</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>GridController</servlet-name>
+    <servlet-class>com.chachati.asistencia.GridController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GridController</servlet-name>
+    <url-pattern>/grid</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>LogOut</servlet-name>
+    <servlet-class>com.chachati.asistencia.LogOutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogOut</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+</web-app>
