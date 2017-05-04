@@ -13,7 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.chachati.asistencia.dao.LoginDao;
-import com.chachati.asistencia.utils.PasswordEncryption;
 
 public class CheckCredentials extends HttpServlet {
 
@@ -40,7 +39,7 @@ public class CheckCredentials extends HttpServlet {
         logger.info("Checking credentials for user [" + userId + "]");
         
         String realPassword = userId.substring(userId.indexOf('-')-4, userId.indexOf('-'));
-        logger.info("realPassword = [" + realPassword + "]");
+        logger.debug("password: ["+ password + "], realPassword = [" + realPassword + "]");
         
         if (StringUtils.equals(password, realPassword)) {
             logger.info("Valid credentials for user [" + userId + "]");
