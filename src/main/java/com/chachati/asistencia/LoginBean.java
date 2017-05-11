@@ -2,7 +2,7 @@ package com.chachati.asistencia;
 
 public class LoginBean {
     private String email;
-    private String pass; 
+    private String pass;
 
     public String getEmail() {
         return email;
@@ -21,12 +21,11 @@ public class LoginBean {
     }
 
     public LoginBean() {
-        
+
     }
 
     public LoginBean(String username, String password) {
-       this.email = username;
-       this.pass = password;
+        this.email = username;
+        this.pass = password;
     }
-
 }

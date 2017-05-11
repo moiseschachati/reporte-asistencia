@@ -18,26 +18,24 @@ public class UserInfo extends HttpServlet {
     final static Logger logger = Logger.getLogger(UserInfo.class);
 
     public UserInfo() {
-        // TODO Auto-generated constructor stub
     }
-    
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("username");
         logger.info("Showing info for user [" + userId + "]");
-        
+
         EmployeeDataDAO employeeDataDao = new EmployeeDataDAO();
-        
+
         EmployeeDataTO employeeData = employeeDataDao.getEmployeeData(userId);
-        
+
         session.setAttribute("employeeName", employeeData.getEmployeeName());
         session.setAttribute("employeeRut", employeeData.getEmployeeRut());
         session.setAttribute("employeeDepartment", employeeData.getEmployeeDepartment());
         session.setAttribute("companies", employeeData.getCompanies());
-        
+
         response.sendRedirect("info.jsp");
     }
-
 }

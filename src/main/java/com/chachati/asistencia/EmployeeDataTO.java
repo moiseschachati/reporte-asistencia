@@ -8,9 +8,7 @@ public class EmployeeDataTO {
     private String employeeRut;
     private String employeeDepartment;
 
-    public EmployeeDataTO() {
-        // TODO Auto-generated constructor stub
-    }
+    public EmployeeDataTO() {}
 
     public List<Company> getCompanies() {
         return companies;

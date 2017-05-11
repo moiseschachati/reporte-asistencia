@@ -14,7 +14,7 @@ import com.chachati.asistencia.utils.ConnectionProvider;
 
 public class EmployeeDataDAO {
     final static Logger logger = Logger.getLogger(EmployeeDataDAO.class);
-    
+
     private static final String EMPLOYEE_NAME_COLUMN_LABEL = "NAME";
     private static final String EMPLOYEE_SSN_COLUMN_LABEL = "SSN";
     private static final String EMPLOYEE_DEFAULTDEPTID_COLUMN_LABEL = "DEPTNAME";
@@ -35,15 +35,15 @@ public class EmployeeDataDAO {
         String employeeName = EMPLOYEE_DATA_DEFAULT_VALUE;
         String employeeRut = EMPLOYEE_DATA_DEFAULT_VALUE;
         String employeeDepartment = EMPLOYEE_DATA_DEFAULT_VALUE;
-        
+
         logger.info("Getting user data for user: [" + userId + "]");
         try {
             Connection con = ConnectionProvider.getCon();
 
-            PreparedStatement ps = con.prepareStatement("SELECT ui.NAME, ui.SSN, dep.DEPTNAME "
-                    + "FROM dbo.USERINFO ui,  dbo.DEPARTMENTS dep "
-                    + "WHERE ui.USERID = (SELECT USERID FROM dbo.USERINFO WHERE SSN = ? ) "
-                    + "AND ui.DEFAULTDEPTID = dep.DEPTID ");
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT ui.NAME, ui.SSN, dep.DEPTNAME " + "FROM dbo.USERINFO ui,  dbo.DEPARTMENTS dep "
+                            + "WHERE ui.USERID = (SELECT USERID FROM dbo.USERINFO WHERE SSN = ? ) "
+                            + "AND ui.DEFAULTDEPTID = dep.DEPTID ");
 
             ps.setString(1, userId);
 
@@ -58,7 +58,7 @@ public class EmployeeDataDAO {
             employeeData.setEmployeeDepartment(employeeDepartment);
 
             logger.info("Getting employee data for user: [" + userId + "]");
-            
+
             ps = con.prepareStatement("SELECT bi.rut, bi.direccion, bi.nombre "
                     + "FROM dbo.USERINFO ui, dbo.Business bi,  dbo.user_business bu "
                     + " WHERE ui.USERID = (SELECT USERID FROM dbo.USERINFO WHERE SSN = ? ) "
@@ -67,14 +67,14 @@ public class EmployeeDataDAO {
             ps.setString(1, userId);
 
             List<Company> companies = new ArrayList<Company>();
-            
+
             rs = ps.executeQuery();
             if (rs.next()) {
                 companyName = rs.getString(COMPANY_NAME_COLUMN_LABEL);
                 companyRut = rs.getString(COMPANY_RUT_COLUMN_LABEL);
                 companyAddress = rs.getString(COMPANY_ADDRESS_COLUMN_LABEL);
                 companies.add(new Company(companyName, companyRut, companyAddress));
-                
+
                 companyName = EMPLOYEE_DATA_DEFAULT_VALUE;
                 companyRut = EMPLOYEE_DATA_DEFAULT_VALUE;
                 companyAddress = EMPLOYEE_DATA_DEFAULT_VALUE;
@@ -83,7 +83,7 @@ public class EmployeeDataDAO {
             if (companies.isEmpty()) {
                 companies.add(new Company(companyName, companyRut, companyAddress));
             }
-            
+
             employeeData.setCompanies(companies);
 
         } catch (Exception e) {
@@ -92,5 +92,4 @@ public class EmployeeDataDAO {
 
         return employeeData;
     }
-
 }

@@ -25,7 +25,7 @@ public class CheckInOutDAO {
     final static Logger logger = Logger.getLogger(CheckInOutDAO.class);
     private static final String CHECKINOUT_DATA_DEFAULT_VALUE = "Desconocido";
     private static final Map<Integer, String> verifyMethodMap;
-    
+
     static {
         Map<Integer, String> map = new HashMap<Integer, String>();
         map.put(1, "Huella");
@@ -33,8 +33,8 @@ public class CheckInOutDAO {
         map.put(4, "Tarjeta");
         verifyMethodMap = Collections.unmodifiableMap(map);
     }
-    public CheckInOutDAO() {
-    }
+
+    public CheckInOutDAO() {}
 
     public LinkedList<CheckInOutTO> getEmployeeData(String userId, String fromDate, String toDate) {
         StringBuilder checkTimeBuilder;
@@ -45,16 +45,15 @@ public class CheckInOutDAO {
         String verifyCode = CHECKINOUT_DATA_DEFAULT_VALUE;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        
+
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         Date parsedFromDate = null;
         Date parsedToDate = null;
         try {
             parsedFromDate = format.parse(fromDate);
             parsedToDate = format.parse(toDate);
         } catch (ParseException e1) {
-            // TODO Auto-generated catch block
             logger.debug(e1);
         }
         java.sql.Date sqlFromDate = new java.sql.Date(parsedFromDate.getTime());
@@ -66,12 +65,13 @@ public class CheckInOutDAO {
             Connection con = ConnectionProvider.getCon();
 
             logger.info("Getting asistance data for user: [" + userId + "]");
-            
-            PreparedStatement ps = con.prepareStatement("SELECT cio.CHECKTIME, cio.CHECKTYPE, mac.MachineAlias, cio.sn, cio.VERIFYCODE "
-                    + "FROM dbo.CHECKINOUT cio, dbo.Machines mac "
-                    + "WHERE cio.USERID = (SELECT USERID FROM dbo.USERINFO WHERE SSN = ?) "
-                    + "AND mac.MachineNumber = cio.SENSORID "
-                    + "AND cio.CHECKTIME BETWEEN ? AND ? " + "ORDER BY CHECKTIME ASC ");
+
+            PreparedStatement ps = con
+                    .prepareStatement("SELECT cio.CHECKTIME, cio.CHECKTYPE, mac.MachineAlias, cio.sn, cio.VERIFYCODE "
+                            + "FROM dbo.CHECKINOUT cio, dbo.Machines mac "
+                            + "WHERE cio.USERID = (SELECT USERID FROM dbo.USERINFO WHERE SSN = ?) "
+                            + "AND mac.MachineNumber = cio.SENSORID " + "AND cio.CHECKTIME BETWEEN ? AND ? "
+                            + "ORDER BY CHECKTIME ASC ");
 
             ps.setString(1, userId);
             ps.setDate(2, sqlFromDate);
@@ -80,17 +80,17 @@ public class CheckInOutDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Timestamp ts = rs.getTimestamp("CHECKTIME");
-                
+
                 LocalDate ldt = DateUtils.localDateFromTimestamp(ts).toLocalDate();
                 checkTimeBuilder = new StringBuilder(ts.toString());
                 checkTime = checkTimeBuilder.substring(checkTimeBuilder.indexOf(" "), checkTimeBuilder.indexOf("."));
                 checkType = rs.getString("CHECKTYPE");
                 sn = rs.getString("sn");
                 machineAlias = rs.getString("MachineAlias");
-                verifyCode= verifyMethodMap.get(rs.getInt("VERIFYCODE"));
+                verifyCode = verifyMethodMap.get(rs.getInt("VERIFYCODE"));
 
-                checkInOutList
-                        .add(new CheckInOutTO(ldt.format(formatter), checkTime, checkType.matches("(o|O|0)") ? "Salida" : "Entrada", machineAlias, sn, verifyCode));
+                checkInOutList.add(new CheckInOutTO(ldt.format(formatter), checkTime,
+                        checkType.matches("(o|O|0)") ? "Salida" : "Entrada", machineAlias, sn, verifyCode));
             }
 
         } catch (Exception e) {
@@ -99,5 +99,4 @@ public class CheckInOutDAO {
 
         return checkInOutList;
     }
-
 }

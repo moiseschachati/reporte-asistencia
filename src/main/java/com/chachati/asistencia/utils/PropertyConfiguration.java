@@ -13,11 +13,11 @@ import org.apache.log4j.Logger;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class PropertyConfiguration extends HttpServlet{
+public class PropertyConfiguration extends HttpServlet {
 
     private static final long serialVersionUID = 5174856060131442424L;
     final static Logger logger = Logger.getLogger(PropertyConfiguration.class);
-    
+
     InputStream inputStream;
     private static PropertyConfiguration instance = null;
     private Properties p;
@@ -27,18 +27,18 @@ public class PropertyConfiguration extends HttpServlet{
         String propFileName = "config.properties";
         ClassLoader cl = ClassLoader.getSystemClassLoader();
 
-        URL[] urls = ((URLClassLoader)cl).getURLs();
-        
-        String path = urls[0].toString().substring(urls[0].toString().indexOf("file:/")+6,urls[0].toString().lastIndexOf('/'));
-        //String path = "C:/Users/Moises/Desktop/entrega-reporte-asistencia-27-03-17/reporte-asistencia";
+        URL[] urls = ((URLClassLoader) cl).getURLs();
+
+        //String path =urls[0].toString().substring(urls[0].toString().indexOf("file:/")+6,urls[0].toString().lastIndexOf('/'));
+        String path = "C:/Users/Moises/Desktop/entrega-reporte-asistencia-27-03-17/reporte-asistencia";
         logger.debug("path: " + path);
-        
-        try {            
-            inputStream = new FileInputStream(path+"/config.properties");
+
+        try {
+            inputStream = new FileInputStream(path + "/config.properties");
             if (inputStream != null) {
                 p.load(inputStream);
             } else {
-                inputStream = new FileInputStream("/"+path+"/config.properties");
+                inputStream = new FileInputStream("/" + path + "/config.properties");
                 if (inputStream != null) {
                     p.load(inputStream);
                 } else {

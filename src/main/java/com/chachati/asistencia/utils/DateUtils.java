@@ -6,11 +6,9 @@ import java.time.ZoneId;
 
 public class DateUtils {
 
-    public DateUtils() {
-    }
-    
+    public DateUtils() {}
+
     public static LocalDateTime localDateFromTimestamp(Timestamp timestamp) {
-        return LocalDateTime
-            .ofInstant(timestamp.toInstant(), ZoneId.of("UTC"));
-      }
+        return LocalDateTime.ofInstant(timestamp.toInstant(), ZoneId.of("UTC"));
+    }
 }

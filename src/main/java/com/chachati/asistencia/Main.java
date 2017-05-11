@@ -15,6 +15,7 @@ public class Main {
         PropertyConfiguration sp = PropertyConfiguration.getInstance();
 
         logger.info("Starting embedded web server...");
+        
         // 1. Creating the server on specified port
         Server server = new Server(Integer.valueOf(sp.getProperty("jetty.server.port")));
 

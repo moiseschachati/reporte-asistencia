@@ -15,15 +15,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 public class AuthenFilter implements Filter {
-    
+
     final static Logger logger = Logger.getLogger(AuthenFilter.class);
 
     public AuthenFilter() {
-        // TODO Auto-generated constructor stub
     }
 
     public void destroy() {
-        // TODO Auto-generated method stub
     }
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
@@ -44,16 +42,18 @@ public class AuthenFilter implements Filter {
         boolean loginRequest = URI.equals(loginURI);
 
         if (loggedIn || loginRequest) {
-            if (loggedIn) logger.info("User [" + session.getAttribute("username") + "] logged in, redirecting to requested page");
-            chain.doFilter(request, response); // User is logged in, just continue request.
+            if (loggedIn)
+                logger.info("User [" + session.getAttribute("username") + "] logged in, redirecting to requested page");
+            // User is logged in, just continue request.
+            chain.doFilter(request, response); 
         } else {
             logger.info("User not logged in, redirecting to login page");
             session.setAttribute("errorMessage", "Por favor iniciar sesión para continuar");
-            response.sendRedirect(request.getContextPath() + "/login.jsp"); // Not logged in, show login page.
+            // Not logged in, show login page.
+            response.sendRedirect(request.getContextPath() + "/login.jsp"); 
         }
     }
 
-    public void init(FilterConfig config) throws ServletException {
-    }
+    public void init(FilterConfig config) throws ServletException {}
 
 }

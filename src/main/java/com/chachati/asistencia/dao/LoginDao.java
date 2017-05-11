@@ -50,7 +50,6 @@ public class LoginDao {
     }
 
     public static void setPassword(String userId, String password) {
-        // TODO MOVE THIS LOGIC TO thE CALLER
         String encryptedPassword = PasswordEncryption.hashPassword(password);
 
         try {
@@ -96,7 +95,7 @@ public class LoginDao {
         }
         return false;
     }
-    
+
     public static Boolean passwordExists(String userId) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
@@ -104,7 +103,8 @@ public class LoginDao {
         try {
             con = ConnectionProvider.getCon();
 
-            ps = con.prepareStatement("SELECT user_id FROM dbo.user_login ul WHERE user_id IN (SELECT USERID FROM dbo.USERINFO WHERE SSN = ?)");
+            ps = con.prepareStatement(
+                    "SELECT user_id FROM dbo.user_login ul WHERE user_id IN (SELECT USERID FROM dbo.USERINFO WHERE SSN = ?)");
             ps.setString(1, userId);
 
             ResultSet rs = ps.executeQuery();

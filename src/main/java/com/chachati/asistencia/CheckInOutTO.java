@@ -7,12 +7,13 @@ public class CheckInOutTO {
     private String machineAlias;
     private String sn;
     private String verifyCode;
-    
+
     public CheckInOutTO() {
         // TODO Auto-generated constructor stub
     }
-    
-    public CheckInOutTO(String checkDate, String checkTime, String checkType, String machineAlias, String sn, String verifyCode) {
+
+    public CheckInOutTO(String checkDate, String checkTime, String checkType, String machineAlias, String sn,
+            String verifyCode) {
         this.checkDate = checkDate;
         this.checkTime = checkTime;
         this.checkType = checkType;

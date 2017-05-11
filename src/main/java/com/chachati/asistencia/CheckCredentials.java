@@ -35,12 +35,12 @@ public class CheckCredentials extends HttpServlet {
             logger.info("Error verifying existance of user [" + userId + "]");
             e1.printStackTrace();
         }
-        
+
         logger.info("Checking credentials for user [" + userId + "]");
-        
-        String realPassword = userId.substring(userId.indexOf('-')-4, userId.indexOf('-'));
-        logger.debug("password: ["+ password + "], realPassword = [" + realPassword + "]");
-        
+
+        String realPassword = userId.substring(userId.indexOf('-') - 4, userId.indexOf('-'));
+        logger.debug("password: [" + password + "], realPassword = [" + realPassword + "]");
+
         if (StringUtils.equals(password, realPassword)) {
             logger.info("Valid credentials for user [" + userId + "]");
             session.setAttribute("username", userId);
@@ -49,8 +49,9 @@ public class CheckCredentials extends HttpServlet {
             wrongUserPasswordRedirect(session, request, response, userId);
         }
     }
-    
-    private void wrongUserPasswordRedirect(HttpSession session, HttpServletRequest request, HttpServletResponse response, String userId) throws IOException{
+
+    private void wrongUserPasswordRedirect(HttpSession session, HttpServletRequest request,
+            HttpServletResponse response, String userId) throws IOException {
         logger.info("Invalid credentials for user [" + userId + "]");
         session.setAttribute("errorMessage", "Usuario o contraseña invalida, intente nuevamente");
         response.sendRedirect(request.getContextPath() + "/login.jsp");

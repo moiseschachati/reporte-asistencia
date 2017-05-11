@@ -28,7 +28,8 @@ public class ConnectionProvider {
             // the sql server driver string
             Class.forName(sp.getProperty(DB_DRIVER_KEY));
             if (!StringUtils.isBlank(sp.getProperty(DB_INSTANCE_KEY))) {
-                url.append(sp.getProperty(DB_INSTANCE_KEY)).append(";DatabaseName=").append(sp.getProperty(DB_NAME_KEY));
+                url.append(sp.getProperty(DB_INSTANCE_KEY)).append(";DatabaseName=")
+                        .append(sp.getProperty(DB_NAME_KEY));
             } else {
                 url.append(sp.getProperty(DB_HOST_KEY)).append(":").append(sp.getProperty(DB_PORT_KEY))
                         .append(";DatabaseName=").append(sp.getProperty(DB_NAME_KEY));
