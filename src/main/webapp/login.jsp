@@ -18,8 +18,6 @@
 				</div>
 				<c:remove var="successMessage" scope="request" />
 				</c:if>
-				
-				 
 
 				<h3 class="text-center text-primary">
 					Inicio de Sesión

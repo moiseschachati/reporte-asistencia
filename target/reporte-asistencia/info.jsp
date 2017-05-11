@@ -1,5 +1,15 @@
 <jsp:include page="header.jsp"></jsp:include>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style type="text/css">
+/**
+ * Override feedback icon position
+ * See http://formvalidation.io/examples/adjusting-feedback-icon-position/
+ */
+#eventForm .form-control-feedback {
+    top: 0;
+    right: -15px;
+}
+</style>
 <div class="row">
 	<div class="col-md-3"></div>
 	<div class="col-md-6">
@@ -51,21 +61,46 @@
 <div class="row">
 	<div class="col-md-12"></div>
 </div>
+
 <div class="row">
 	<div class="col-md-3"></div>
 	<div class="col-md-6">
 		<div class="panel panel-primary">
 			<!-- Default panel contents -->
 			<div class="panel-heading text-center">
-				<strong>Buscar informaci&oacute;n de asistencia</strong>
+				<strong>Consultar informaci&oacute;n de asistencia</strong>
 			</div>
-			<form role="form" class="form-horizontal">
+			<form role="form" class="form-horizontal" id="eventForm">
+				<br>
 				<div class="form-group">
-					<label for="dateofbirth" class="col-sm-3 control-label">Rango
-						de Fechas:</label>
+					<label for="dateofbirth" class="col-sm-3 control-label">Desde:</label>
+					<div class="col-sm-8">
+						<input type='text' class="form-control" id='datetimepicker' name="from"/>
+					</div>
+					<div class="col-sm-3"></div>
+					<div class="col-sm-9 messageContainer"></div>
+				</div>
+				<div class="form-group">
+					<label for="dateofbirth2" class="col-sm-3 control-label">Hasta:</label>
+					<div class="col-sm-8">
+						<input type='text' class="form-control" id='datetimepicker2' name="to"/>
+					</div>
+					<div class="col-sm-3">
+					</div>
+					<div class="col-sm-9 messageContainer">
+					</div>
+				</div>
+				<!-- #messages is where the messages are placed inside -->
+			    <div class="form-group">
+			        <div class="col-md-9 col-md-offset-3">
+			            <div id="messages"></div>
+			        </div>
+			    </div>
+				<div class="form-group">
+					<div class="col-sm-3">
+					</div>
 					<div class="col-sm-9">
-						<input class="form-control" type="text" name="datefilter" value=""
-							placeholder="Seleccione Rango de Fechas a Consultar" />
+						<button id="savenewappointment" type="button" class="btn btn-primary" >Consultar</button>
 					</div>
 				</div>
 			</form>
@@ -73,23 +108,25 @@
 	</div>
 	<div class="col-md-3"></div>
 </div>
+
 <hr
 	style="border: 0 !important; height: 1px !important; background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0) !important; background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0) !important; background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0) !important; background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0) !important;">
 <div class="row">
-	<div class="col-md-3"></div>
-	<div class="col-md-6">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
 
 		<div class="panel panel-primary">
 			<!-- Default panel contents -->
 
-			<div class="panel-heading text-center">Registro de asistencias
-			</div>
+			<div class="panel-heading text-center"><strong>Registro de asistencia</strong></div>
 			<table id="records_table" class="table table-striped">
 				<thead class="thead-inverse">
 					<tr>
 						<th>Fecha</th>
 						<th>Hora</th>
-						<th>Entrada / Salida</th>
+						<th>Tipo Mov</th>
+						<th>M&eacute;todo Verificaci&oacute;n</th>
+						<th>C&oacute;digo Lector</th>
 						<th>Reloj</th>
 					</tr>
 				</thead>
@@ -99,84 +136,9 @@
 			</table>
 		</div>
 
-		<div class="col-md-3"></div>
+		<div class="col-md-2"></div>
 	</div>
 </div>
-<script type="text/javascript">
-	$('input[name="datefilter"]').daterangepicker(
-			{
-				alwaysShowCalendars : true,
-				autoUpdateInput : false,
-				locale : {
-					format : 'YYYY-MM-DD',
-					separator : ' | ',
-					applyLabel : 'Consultar',
-					cancelLabel : 'Cancelar',
-					monthNames : [ 'enero', 'febrero', 'marzo', 'abril',
-							'mayo', 'junio', 'julio', 'agosto', 'septembre',
-							'octubre', 'noviembre', 'diciembre' ],
-				}
-			},
-			function(start, end, label) {
-				console.log("A new date range was chosen: "
-						+ start.format('YYYY-MM-DD') + ' to '
-						+ end.format('YYYY-MM-DD'));
-				//loadXMLDoc(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
-				testFunction(start.format('YYYY-MM-DD'), end
-						.format('YYYY-MM-DD'));
-			});
-
-	$('input[name="datefilter"]').on(
-			'apply.daterangepicker',
-			function(ev, picker) {
-				$(this).val(
-						picker.startDate.format('YYYY-MM-DD') + ' | '
-								+ picker.endDate.format('YYYY-MM-DD'));
-			});
-
-	$('input[name="datefilter"]').on('cancel.daterangepicker',
-			function(ev, picker) {
-				$(this).val('');
-			});
-</script>
-<!-- <script type="text/javascript">
-	function loadXMLDoc(start, end) {
-		var xmlhttp;
-		var config = $('input[name="datefilter"]').daterangepicker({})[0].value;
-		var url = "grid";
-		if (window.XMLHttpRequest) {
-			xmlhttp = new XMLHttpRequest();
-		} else {
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.onreadystatechange = function() {
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				document.getElementById("records_table").innerHTML = xmlhttp.responseText;
-			}
-		}
-
-		xmlhttp.open("GET", url + "?" + start + "." + end, true);
-		xmlhttp.send();
-	}
-</script> -->
-
-<!-- 		<script type="text/javascript">
-		function testFunction(start, end)
-	      {// When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
-		    $.get("grid"+"?"+start + "." + end, function(responseJson) {          // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
-		        var $table = $("<table>").appendTo($("#myDiv")); // Create HTML <table> element and append it to HTML DOM element with ID "somediv".
-		        $.each(responseJson, function(index, product) {    // Iterate over the JSON array.
-		        	
-		        	$("<tr>").appendTo($table)                     // Create HTML <tr> element, set its text content with currently iterated item and append it to the <table>.
-		                .append($("<td>").text(product.userId))        // Create HTML <td> element, set its text content with id of currently iterated product and append it to the <tr>.
-		                .append($("<td>").text(product.checkTime))      // Create HTML <td> element, set its text content with name of currently iterated product and append it to the <tr>.
-		                .append($("<td>").text(product.machineAlias)
-		                .append("<tr>"));    // Create HTML <td> element, set its text content with price of currently iterated product and append it to the <tr>.
-		        	console.log('checkTime: ' + product.checkTime + ' checkType: ' + product.checkType + ' machineAlias: ' + product.machineAlias);
-		        });
-		    });
-		}
-		</script> -->
 <script>
 	function testFunction(start, end) {
 		$.ajax({
@@ -194,15 +156,20 @@
 				
 				trHTML += '<tbody>';
 				$.each(response, function(key, value) {
-							trHTML += '<tr><td>' + value.checkDate + '</td><td>'
+							trHTML += '<tr><td class="col-md-2">' + value.checkDate + '</td><td>'
 							+ value.checkTime + '</td><td>'
 							+ value.checkType + '</td><td>'
+							+ value.verifyCode + '</td><td>'
+							+ value.sn + '</td><td>'
+							
 							+ value.machineAlias
 					'</td></tr>';
 					console.log('checkDate: ' + value.checkDate
 							+ 'checkTime: ' + value.checkTime
 							+ ' checkType: ' + value.checkType
-							+ ' machineAlias: ' + value.machineAlias);
+							+ ' machineAlias: ' + value.machineAlias
+							+ ' metodo verficacion: ' + value.machineAlias
+							+ ' codigo lector: ' + value.machineAlias);
 				});
 				trHTML += '</tbody>';
 				$('#records_table').append(trHTML);
@@ -220,8 +187,16 @@
 			destroy: true,
 			pagingType : 'full',
 			searching : false,
+			aoColumns : [
+				{ "sType": "date-uk" },
+	            null,
+	            null,
+	            null,
+	            null,
+	            null
+	        ],
 			language : {
-				emptyTable : "No se encontr$oacute; informaci$oacute;n de asistencia en el rango consultado",
+				emptyTable : "No se encontro informacion de asistencia en el rango consultado",
 				info : "Mostrando _START_ a _END_ de _TOTAL_ registros",
 				lengthMenu : "Mostrar _MENU_ registros",
 				paginate : {
@@ -241,6 +216,101 @@
 			}
 		});
 	}
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale: 'es',
+            useCurrent: false
+      });
+        $('#datetimepicker2').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale: 'es',
+            useCurrent: false //Important! See issue #1075
+        });
+        $("#datetimepicker").on("dp.change", function (e) {
+        	$('#eventForm').formValidation('revalidateField', 'from');
+            $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker2").on("dp.change", function (e) {
+        	$('#eventForm').formValidation('revalidateField', 'to');
+            $('#datetimepicker').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+    $('#savenewappointment').click(function () {
+        var start_date = $('#datetimepicker').data("DateTimePicker").date();
+        var end_date = $('#datetimepicker2').data("DateTimePicker").date();
+        
+        if ($("#datetimepicker").val() && $("#datetimepicker2").val()){
+        	//alert("is not an empty string"+start_date.format('YYYY-MM-DD')+ " " + end_date.format('YYYY-MM-DD'));
+        	console.log('calling testfunction');
+        	testFunction(start_date.format('YYYY-MM-DD'), end_date.format('YYYY-MM-DD'));
+        }
+    });
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#eventForm').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            from: {
+                validators: {
+                    notEmpty: {
+                        message: 'La fecha inicial es requerida'
+                    },
+                    date: {
+                        format: 'DD/MM/YYYY',
+                        message: 'El formato de la fecha inicial no es valido'
+                    }
+                }
+            },
+            to: {
+                validators: {
+                    notEmpty: {
+                    	format: 'DD/MM/YYYY',
+                        message: 'La fecha final es requerida'
+                    },
+                    date: {
+                        format: 'DD/MM/YYYY',
+                        message: 'El formato de la fecha final no es valido'
+                    }
+                }
+            }
+        }
+    })
+    .on('success.field.fv', function(e, data) {
+    	console.log('invalid fields: '+data.fv.getInvalidFields().length);
+            if (data.fv.getInvalidFields().length > 0) {    // There is invalid field
+            	console.log('invalid fields: '+data.fv.getInvalidFields().length);
+                data.fv.disableSubmitButtons(true);
+            }
+        });
+});
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+	"date-uk-pre": function ( a ) {
+	    var ukDatea = a.split('-');
+		console.log('SORT date-uk-pre: ');
+	    return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+	},
+
+	"date-uk-asc": function ( a, b ) {
+		console.log('SORT date-uk-asc: ');
+	    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	},
+
+	"date-uk-desc": function ( a, b ) {
+		console.log('SORT date-uk-desc: ');
+	    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	}
+	});
 </script>
 </body>
 </html>

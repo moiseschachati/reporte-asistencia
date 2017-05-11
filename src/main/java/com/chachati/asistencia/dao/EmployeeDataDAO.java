@@ -57,7 +57,7 @@ public class EmployeeDataDAO {
             employeeData.setEmployeeRut(employeeRut);
             employeeData.setEmployeeDepartment(employeeDepartment);
 
-            logger.info("Getting asistance data for user: [" + userId + "]");
+            logger.info("Getting employee data for user: [" + userId + "]");
             
             ps = con.prepareStatement("SELECT bi.rut, bi.direccion, bi.nombre "
                     + "FROM dbo.USERINFO ui, dbo.Business bi,  dbo.user_business bu "
@@ -80,7 +80,6 @@ public class EmployeeDataDAO {
                 companyAddress = EMPLOYEE_DATA_DEFAULT_VALUE;
             }
 
-            //
             if (companies.isEmpty()) {
                 companies.add(new Company(companyName, companyRut, companyAddress));
             }
@@ -88,8 +87,7 @@ public class EmployeeDataDAO {
             employeeData.setCompanies(companies);
 
         } catch (Exception e) {
-            logger.info("ERROR Getting user data from db for user: [" + userId + "]");
-            e.printStackTrace();
+            logger.info("ERROR Getting employee data from db for user: [" + userId + "]");
         }
 
         return employeeData;

@@ -20,7 +20,6 @@ public class GridController extends HttpServlet {
     final static Logger logger = Logger.getLogger(GridController.class);
 
     public GridController() {
-        // TODO Auto-generated constructor stub
     }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,10 +45,6 @@ public class GridController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json);
-        //response.getOutputStream().println("*");
-        //response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
-        //response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-        //response.getWriter().write("*");       // Write response body.
     }
 
 }
